@@ -1,7 +1,7 @@
 # DiscordBrightspaceBot
 Posts recent Brightspace events to discord
 
-Follow this guide up until "How to Set Up Discord Events for Your Bot", then run code.py:
+Follow this guide up until "How to Code a Basic Discord Bot with the discord.py Library", then run code.py:
 https://www.freecodecamp.org/news/create-a-discord-bot-with-python/
 
 Make sure to install selenium and webdriver_manager using pip
