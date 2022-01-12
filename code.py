@@ -16,6 +16,7 @@ username = "INSERT EMAIL"
 password = "INSERT PASSWORD"
 def parser(page):
     page = page.replace('&amp;quot;', '')
+    page = page.replace('&quot;', '')
     new = []
     smallerbits = []
     almostfinal = []
@@ -58,7 +59,13 @@ def parser(page):
         almostfinal[i] = almostfinal[i].replace("4349", "")
         almostfinal[i] = almostfinal[i].replace("3451", "")
         almostfinal[i] = almostfinal[i].replace("3320", "")
-    return almostfinal
+        almostfinal[i] = almostfinal[i].replace("created", "")
+    um = []
+    for i in range(len(almostfinal)):
+        um.append(almostfinal[i].split(" - "))
+        um[i].pop(1)
+        um[i].pop(1)
+    return um
 
 def login(email, password):
     global driver
@@ -87,17 +94,17 @@ def alert():
         except:
             pass
     return  driver.page_source
+login(username, password)
 
 @client.event
 async def on_message(message):
-    global driver
     if "!list" in message.content and len(message.content.split()) == 1: 
-        driver = webdriver.Chrome(ChromeDriverManager().install())
-        login(username, password)
         page = alert()
         pagelist = parser(page)
-        await message.channel.send(f"{message.author.mention} Recent Brightspace Events:")
+        await message.channel.send(f"{message.author.mention} New Brightspace Events:")
         for i in range(len(pagelist)):
-            await message.channel.send('>>> ' + str(i+1) + ": " + pagelist[i] + '\n')
-        driver.close()
+            pagelist[i][1] = pagelist[i][1].replace(" ", "", 1)
+            if pagelist[i][1].endswith(" "):
+              pagelist[i][1] = pagelist[i][1][:-1] 
+            await message.channel.send('>>> ' + '**' + pagelist[i][0] + ': ** ' + pagelist[i][1] + '\n')
 client.run(token)
